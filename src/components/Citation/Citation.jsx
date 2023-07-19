@@ -20,7 +20,7 @@ const CopyUrlButton = ({ citation, buttonText }) => {
   );
 };
 
-function Citation({ title, author, link, type = 'article', year }) {
+function Citation({ title, authors, link, type = 'article', year }) {
   const [format, setFormat] = useState('bibliography');
   const [subFormat, setSubFormat] = useState('html');
   const [citation, setCitation] = useState();
@@ -29,7 +29,7 @@ function Citation({ title, author, link, type = 'article', year }) {
     let citation = new Cite({
       title: title,
       type: type,
-      author: author,
+      author: authors,
       issued: { 'date-parts': [[year]] },
       URL: link,
     });
@@ -41,9 +41,15 @@ function Citation({ title, author, link, type = 'article', year }) {
     setCitation(output);
     if (subFormat === 'html')
       setCitation(
-        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <a href=${link}>${link}</a> </blockquote>`,
+        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <p>
+        ${authors.map((author, index) => {
+          let separator = '';
+          if (index < authors.length - 1) separator = ' , ';
+          return author.family + ' ' + author.given.charAt(0) + '.' + separator;
+        })}
+      </p>  <a href=${link}>${link}</a> </blockquote>`,
       );
-  }, [author, format, year, link, subFormat, title, type]);
+  }, [authors, format, year, link, subFormat, title, type]);
 
   const handleChangeFormat = (format, subformat) => {
     setFormat(format);
@@ -103,6 +109,15 @@ function Citation({ title, author, link, type = 'article', year }) {
         <blockquote>
           <p>({year}).</p>
           <p>{title}</p>
+          <p>
+            {authors.map((author, index) => {
+              let separator = '';
+              if (index < authors.length - 1) separator = ' , ';
+              return (
+                author.family + ' ' + author.given.charAt(0) + '.' + separator
+              );
+            })}
+          </p>
           <a href={link}>{link}</a>
         </blockquote>
       )}

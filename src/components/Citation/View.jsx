@@ -1,14 +1,15 @@
 import React from 'react';
 import Citation from './Citation';
 
-function CitationBlockView() {
+function CitationBlockView({ data }) {
+  console.log(data);
   return (
     <div>
       <Citation
-        title="Formatarea bernouli"
-        authors={[{ given: 'Alexandru', family: 'Ardeleanu' }]}
-        link="google.com"
-        year={1939}
+        title={data?.title || ''}
+        authors={data.author || []}
+        link={data.url}
+        year={data.year}
       />
     </div>
   );

@@ -1,25 +1,19 @@
 import accordionSVG from '@plone/volto/icons/list-arrows.svg';
 import { CitationBlockEdit, CitationBlockView } from './components';
-import rightSVG from '@plone/volto/icons/right-key.svg';
-import leftSVG from '@plone/volto/icons/left-key.svg';
-import downSVG from '@plone/volto/icons/down-key.svg';
+import { CitationBlockSchema } from './schema';
 
 const applyConfig = (config) => {
   config.blocks.blocksConfig.citation = {
+    ...config.blocks.blocksConfig.citation,
     id: 'citation',
     title: 'Citation',
     icon: accordionSVG,
-    group: 'common',
-    titleIcons: {
-      closed: { leftPosition: rightSVG, rightPosition: leftSVG },
-      opened: { leftPosition: downSVG, rightPosition: downSVG },
-      size: '24px',
-    },
     view: CitationBlockView,
     edit: CitationBlockEdit,
+    schema: CitationBlockSchema,
     restricted: false,
     mostUsed: false,
-    blockHasOwnFocusManagement: true,
+    blockHasOwnFocusManagement: false,
     sidebarTab: 1,
     options: {
       styled: true,
