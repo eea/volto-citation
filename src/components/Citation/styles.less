@@ -1,4 +1,9 @@
+@secondaryColor: #007b6c;
+
 .citation-block {
+  .citation-copy:hover {
+    cursor: pointer;
+  }
   pre {
     display: block;
     padding: 9.5px;
@@ -21,16 +26,17 @@
     font-style: italic;
     color: #555555;
     padding: 1.2em 30px 1.2em 75px;
-    border-left: 8px solid #78c0a8;
+    border-left: 8px solid @secondaryColor;
     line-height: 1.6;
     position: relative;
     background: #ededed;
+    word-break: break-all;
   }
 
   blockquote::before {
     font-family: Arial;
     content: '\201C';
-    color: #78c0a8;
+    color: @secondaryColor;
     font-size: 4em;
     position: absolute;
     left: 10px;
@@ -47,5 +53,20 @@
     font-style: normal;
     font-weight: bold;
     margin-top: 1em;
+  }
+  @media only screen and (max-width: 768px) {
+    blockquote {
+      width: 100%;
+    }
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: unset !important;
+
+      ::before {
+        width: 0 !important;
+      }
+    }
   }
 }

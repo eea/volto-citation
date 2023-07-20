@@ -3,7 +3,8 @@ import Citation from './Citation';
 import { Icon, SidebarPortal } from '@plone/volto/components';
 import CitationSidebar from './CitationSidebar';
 function CitationBlockEdit(props) {
-  const { data, block, onChangeBlock, selected } = props;
+  const { data, block, onChangeBlock, selected, mode } = props;
+
   return (
     <div>
       <Citation
@@ -11,6 +12,7 @@ function CitationBlockEdit(props) {
         authors={data.author || []}
         link={data.url}
         year={data.year || 'n.d.'}
+        mode={'edit'}
       />
       <SidebarPortal selected={selected}>
         <CitationSidebar
