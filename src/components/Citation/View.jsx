@@ -2,7 +2,6 @@ import React from 'react';
 import Citation from './Citation';
 
 function CitationBlockView({ data }) {
-  console.log(data);
   return (
     <div>
       <Citation

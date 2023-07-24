@@ -16,7 +16,6 @@ const messages = defineMessages({
 
 const CitationSidebar = (props) => {
   const { data, block, onChangeBlock } = props;
-  console.log({ data }, { block }, { onChangeBlock });
   const intl = useIntl();
   const schema = CitationBlockSchema({ ...props, intl });
 

@@ -4,43 +4,45 @@
   .citation-copy:hover {
     cursor: pointer;
   }
+
   pre {
     display: block;
+    overflow: scroll;
     padding: 9.5px;
+    border: 1px solid #ccc;
     margin: 0 0 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color: #333333;
     font-size: 13px;
     line-height: 1.428571429;
-    color: #333333;
     word-break: break-all;
-    overflow: scroll;
     word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
   }
+
   blockquote {
-    font-size: 1.4em;
+    position: relative;
     width: 60%;
-    margin: 50px auto;
-    font-family: Open Sans;
-    font-style: italic;
-    color: #555555;
     padding: 1.2em 30px 1.2em 75px;
     border-left: 8px solid @secondaryColor;
-    line-height: 1.6;
-    position: relative;
+    margin: 50px auto;
     background: #ededed;
+    color: #555555;
+    font-family: Open Sans;
+    font-size: 1.4em;
+    font-style: italic;
+    line-height: 1.6;
     word-break: break-all;
   }
 
   blockquote::before {
-    font-family: Arial;
-    content: '\201C';
-    color: @secondaryColor;
-    font-size: 4em;
     position: absolute;
-    left: 10px;
     top: -10px;
+    left: 10px;
+    color: @secondaryColor;
+    content: '\201C';
+    font-family: Arial;
+    font-size: 4em;
   }
 
   blockquote::after {
@@ -49,19 +51,21 @@
 
   blockquote span {
     display: block;
+    margin-top: 1em;
     color: #333333;
     font-style: normal;
     font-weight: bold;
-    margin-top: 1em;
   }
+
   @media only screen and (max-width: 768px) {
     blockquote {
       width: 100%;
     }
+
     .right {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       margin-left: unset !important;
 
       ::before {

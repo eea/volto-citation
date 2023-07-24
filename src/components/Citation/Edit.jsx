@@ -1,9 +1,9 @@
 import React from 'react';
 import Citation from './Citation';
-import { Icon, SidebarPortal } from '@plone/volto/components';
+import { SidebarPortal } from '@plone/volto/components';
 import CitationSidebar from './CitationSidebar';
 function CitationBlockEdit(props) {
-  const { data, block, onChangeBlock, selected, mode } = props;
+  const { data, block, onChangeBlock, selected } = props;
 
   return (
     <div>
