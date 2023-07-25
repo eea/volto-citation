@@ -1,5 +1,5 @@
 import React from 'react';
-import { CitationBlockSchema } from '../../schema';
+import { CitationBlockSchema } from '../schema';
 import { BlockDataForm } from '@plone/volto/components';
 import { defineMessages, useIntl } from 'react-intl';
 

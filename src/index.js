@@ -1,5 +1,5 @@
 import citationSVG from '@plone/volto/icons/binder.svg';
-import { CitationBlockEdit, CitationBlockView } from './components';
+import { CitationBlockEdit, CitationBlockView } from './Citation';
 import { CitationBlockSchema } from './schema';
 
 const applyConfig = (config) => {

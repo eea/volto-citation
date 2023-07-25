@@ -7,8 +7,8 @@ function CitationBlockView({ data }) {
       <Citation
         title={data?.title || ''}
         authors={data.author || []}
-        link={data.url}
-        year={data.year}
+        link={data.url || ''}
+        year={data.year ?? 'n.d.'}
       />
     </div>
   );

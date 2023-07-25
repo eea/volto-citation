@@ -10,8 +10,8 @@ function CitationBlockEdit(props) {
       <Citation
         title={data?.title || ''}
         authors={data.author || []}
-        link={data.url}
-        year={data.year || 'n.d.'}
+        link={data.url || ''}
+        year={data.year ?? 'n.d.'}
         mode={'edit'}
       />
       <SidebarPortal selected={selected}>
