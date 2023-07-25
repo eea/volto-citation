@@ -1,0 +1,76 @@
+@secondaryColor: #007b6c;
+
+.citation-block {
+  .citation-copy:hover {
+    cursor: pointer;
+  }
+
+  pre {
+    display: block;
+    overflow: scroll;
+    padding: 9.5px;
+    border: 1px solid #ccc;
+    margin: 0 0 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    color: #333333;
+    font-size: 13px;
+    line-height: 1.428571429;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+
+  blockquote {
+    position: relative;
+    width: 60%;
+    padding: 1.2em 30px 1.2em 75px;
+    border-left: 8px solid @secondaryColor;
+    margin: 50px auto;
+    background: #ededed;
+    color: #555555;
+    font-family: Open Sans;
+    font-size: 1.4em;
+    font-style: italic;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+
+  blockquote::before {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    color: @secondaryColor;
+    content: '\201C';
+    font-family: Arial;
+    font-size: 4em;
+  }
+
+  blockquote::after {
+    content: '';
+  }
+
+  blockquote span {
+    display: block;
+    margin-top: 1em;
+    color: #333333;
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  @media only screen and (max-width: 768px) {
+    blockquote {
+      width: 100%;
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: unset !important;
+
+      ::before {
+        width: 0 !important;
+      }
+    }
+  }
+}

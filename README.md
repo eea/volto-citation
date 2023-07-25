@@ -15,11 +15,13 @@
 [![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-citation-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-citation-develop)
 
 
-[Volto](https://github.com/plone/volto) add-on
+[Volto](https://github.com/plone/volto) Citation add-on
 
 ## Features
 
-Demo GIF
+![screen-capture](https://github.com/eea/volto-citation/assets/50819975/3aa06125-6736-4e64-9ede-9006b6219ec9)
+
+Volto Citation shows users how to cite an article. It supports four types of citation: HTML, TEXT, RIS and BibTeX. On top of that you can copy the citation by pressing on the copy button
 
 ## Getting started
 

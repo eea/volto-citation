@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.less';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
+import copySVG from '@plone/volto/icons/copy.svg';
+import checkSVG from '@plone/volto/icons/check.svg';
+import { Icon } from '@plone/volto/components';
+
 import Cite from 'citation-js';
 
-const CopyUrlButton = ({ citation, buttonText }) => {
+const CopyUrlButton = ({ citation }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
+  const [icon, setIcon] = useState(copySVG);
+  useEffect(() => {
+    if (copyUrlStatus === 'copied') {
+      setIcon(checkSVG);
+      setTimeout(() => {
+        setIcon(copySVG);
+      }, [5000]);
+    }
+  }, [copyUrlStatus]);
 
-  if (copyUrlStatus === 'copied') {
-    buttonText = 'Copied!';
-  } else if (copyUrlStatus === 'failed') {
-    buttonText = 'Copy failed. Please try again.';
-  }
-
-  return (
-    <Button primary onClick={copyUrl} className="copy-button">
-      {buttonText}
-    </Button>
-  );
+  return <Icon className="citation-copy" name={icon} onClick={copyUrl} />;
 };
 
-function Citation({ title, author, link, type = 'article', year }) {
+function Citation({ title, authors, link, type = 'article', year, mode }) {
   const [format, setFormat] = useState('bibliography');
   const [subFormat, setSubFormat] = useState('html');
   const [citation, setCitation] = useState();
@@ -29,21 +32,28 @@ function Citation({ title, author, link, type = 'article', year }) {
     let citation = new Cite({
       title: title,
       type: type,
-      author: author,
+      author: authors,
       issued: { 'date-parts': [[year]] },
       URL: link,
     });
     let output = citation.format(format, {
       format: subFormat,
       template: 'apa',
-      lang: 'en-US',
     });
     setCitation(output);
     if (subFormat === 'html')
       setCitation(
-        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <a href=${link}>${link}</a> </blockquote>`,
+        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <p>
+        ${authors.map((author, index) => {
+          let separator = '';
+          if (index < authors.length - 1) separator = ' , ';
+          return (
+            author?.family + ' ' + author.given?.charAt(0) + '.' + separator
+          );
+        })}
+      </p>  <a href=${link}>${link}</a> </blockquote>`,
       );
-  }, [author, format, year, link, subFormat, title, type]);
+  }, [authors, format, year, link, subFormat, title, type]);
 
   const handleChangeFormat = (format, subformat) => {
     setFormat(format);
@@ -93,7 +103,7 @@ function Citation({ title, author, link, type = 'article', year }) {
         </Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item>
-            <CopyUrlButton citation={citation} buttonText="Copy Citation" />
+            <CopyUrlButton citation={citation} />
           </Menu.Item>
         </Menu.Menu>
       </Menu>
@@ -103,7 +113,20 @@ function Citation({ title, author, link, type = 'article', year }) {
         <blockquote>
           <p>({year}).</p>
           <p>{title}</p>
-          <a href={link}>{link}</a>
+          <p>
+            {authors.map((author, index) => {
+              let separator = '';
+              if (index < authors.length - 1) separator = ' , ';
+              return (
+                (author?.family || '') +
+                ' ' +
+                (author.given?.charAt(0) || '') +
+                '.' +
+                separator
+              );
+            })}
+          </p>
+          {mode === 'edit' ? <p>{link}</p> : <a href={link}>{link}</a>}
         </blockquote>
       )}
     </div>
