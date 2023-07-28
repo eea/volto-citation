@@ -3,9 +3,6 @@ import './styles.less';
 import { Tab, Button } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
 import copySVG from '@plone/volto/icons/copy.svg';
-import checkSVG from '@plone/volto/icons/check.svg';
-import { Icon } from '@plone/volto/components';
-
 import Cite from 'citation-js';
 
 const CopyUrlButton = ({ citation, className }) => {
@@ -13,14 +10,16 @@ const CopyUrlButton = ({ citation, className }) => {
   const [icon, setIcon] = useState(copySVG);
   useEffect(() => {
     if (copyUrlStatus === 'copied') {
-      setIcon(checkSVG);
+      setIcon('check');
       setTimeout(() => {
-        setIcon(copySVG);
+        setIcon('copy');
       }, [5000]);
     }
   }, [copyUrlStatus]);
 
-  return <Button icon="copy" className="citation-copy item" />;
+  return (
+    <Button icon={icon} className="citation-copy item" onClick={copyUrl} />
+  );
 };
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
