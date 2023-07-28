@@ -9,6 +9,26 @@ const messages = defineMessages({
     id: 'URL',
     defaultMessage: 'URL',
   },
+  CitationUrlDescription: {
+    id: 'URLDescription',
+    defaultMessage: 'The url where the article can be found',
+  },
+  YearDescription: {
+    id: 'YearDescription',
+    defaultMessage: 'The year when the article was published',
+  },
+  TitleDescription: {
+    id: 'TitleDescription',
+    defaultMessage: 'The title of the article',
+  },
+  AuthorsDescription: {
+    id: 'AauthorsDescription',
+    defaultMessage: 'The authors that have contributed to the article',
+  },
+  AuthorDescription: {
+    id: 'AuthorDescription',
+    defaultMessage: 'One of the authors',
+  },
   Year: {
     id: 'year',
     defaultMessage: 'Year',
@@ -17,38 +37,32 @@ const messages = defineMessages({
     id: 'title',
     defaultMessage: 'Title',
   },
+  Authors: {
+    id: 'authors',
+    defaultMessage: 'Authors',
+  },
   Author: {
     id: 'author',
     defaultMessage: 'Author',
-  },
-  Given: {
-    id: 'given',
-    defaultMessage: 'Given',
-  },
-  Family: {
-    id: 'family',
-    defaultMessage: 'Family',
   },
 });
 
 export const CitationBlockSchema = (props) => {
   const authorSchema = {
     title: props.intl.formatMessage(messages.Author),
+
     fieldsets: [
       {
         id: 'default',
         title: 'Default',
-        fields: ['given', 'family'],
+        fields: ['author'],
       },
     ],
     properties: {
-      given: {
-        title: props.intl.formatMessage(messages.Given),
-        widget: 'default',
-      },
-      family: {
-        title: props.intl.formatMessage(messages.Family),
-        widget: 'default',
+      author: {
+        title: props.intl.formatMessage(messages.Author),
+        a: 'default',
+        description: props.intl.formatMessage(messages.AuthorDescription),
       },
     },
     required: [],
@@ -60,7 +74,7 @@ export const CitationBlockSchema = (props) => {
       {
         id: 'default',
         title: 'Default',
-        fields: ['url', 'year', 'title', 'author'],
+        fields: ['title', 'year', 'authors', 'url'],
       },
     ],
 
@@ -68,19 +82,23 @@ export const CitationBlockSchema = (props) => {
       url: {
         title: props.intl.formatMessage(messages.CitationUrl),
         widget: 'url',
+        description: props.intl.formatMessage(messages.CitationUrlDescription),
       },
       year: {
         title: props.intl.formatMessage(messages.Year),
         widget: 'default',
+        description: props.intl.formatMessage(messages.YearDescription),
       },
       title: {
         title: props.intl.formatMessage(messages.Title),
         widget: 'default',
+        description: props.intl.formatMessage(messages.TitleDescription),
       },
-      author: {
-        title: props.intl.formatMessage(messages.Author),
+      authors: {
+        title: props.intl.formatMessage(messages.Authors),
         widget: 'object_list',
         schema: authorSchema,
+        description: props.intl.formatMessage(messages.AuthorsDescription),
       },
     },
     required: [],

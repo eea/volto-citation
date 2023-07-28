@@ -6,7 +6,7 @@ function CitationBlockView({ data }) {
     <div>
       <Citation
         title={data?.title || ''}
-        authors={data.author || []}
+        authors={data.authors.map((field) => field.author) || []}
         link={data.url || ''}
         year={data.year ?? 'n.d.'}
       />
