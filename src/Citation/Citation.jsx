@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './styles.less';
 import { Tab, Button } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
-import copySVG from '@plone/volto/icons/copy.svg';
 import Cite from 'citation-js';
 
 const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
-  const [icon, setIcon] = useState(copySVG);
+  const [icon, setIcon] = useState('copy');
   useEffect(() => {
     if (copyUrlStatus === 'copied') {
       setIcon('check');
