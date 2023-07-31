@@ -25,9 +25,22 @@ Volto Citation shows users how to cite an article. It supports four types of cit
 
 ## Getting started
 
+### Try volto-citation with Docker
+
+      git clone https://github.com/eea/volto-citation.git
+      cd volto-citation
+      make
+      make start
+
+Go to http://localhost:3000
+
 ### Add volto-citation to your Volto project
 
 1. Make sure you have a [Plone backend](https://plone.org/download) up-and-running at http://localhost:8080/Plone
+
+   ```Bash
+   docker compose up backend
+   ```
 
 1. Start Volto frontend
 
