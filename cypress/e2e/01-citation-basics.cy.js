@@ -46,6 +46,7 @@ describe('Blocks Tests', () => {
     cy.get('pre').contains('year = {2023},');
     cy.get('pre').contains('title = {Citation},');
     cy.get('pre').contains('howpublished = {http://www.eeacitation.com},');
+    cy.get('.citation-block a').first().click();
     // Save
     cy.get('#toolbar-save').click();
     cy.url().should('eq', Cypress.config().baseUrl + '/cypress/my-page');
