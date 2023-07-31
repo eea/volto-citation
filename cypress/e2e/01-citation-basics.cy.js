@@ -27,15 +27,14 @@ describe('Blocks Tests', () => {
     cy.get(' #field-year').click().type('2023');
 
     cy.get('.add-item-button-wrapper').click();
-    cy.get('#field-given-0-author-0').click().type('EEA');
-    cy.get('#field-family-1-author-0').click().type('Developers');
+    cy.get('#field-author-0-authors-0').click().type('Developers E.');
     cy.get('blockquote').contains('(2023)');
     cy.get('blockquote').contains('Citation');
     cy.get('blockquote').contains('Developers E.');
     cy.get('blockquote').contains('http://www.eeacitation.com');
     cy.get('.citation-block a').first().next().click();
     cy.get('pre').contains(
-      'Developers, E. (2023). Citation. http://www.eeacitation.com',
+      'Developers E. (2023). Citation. http://www.eeacitation.com',
     );
     cy.get('.citation-block a').first().next().next().click();
     cy.get('pre').contains('TY  - JOUR');
@@ -43,7 +42,7 @@ describe('Blocks Tests', () => {
     cy.get('pre').contains('TI  - Citation');
     cy.get('pre').contains('UR  - http://www.eeacitation.com');
     cy.get('.citation-block a').first().next().next().next().click();
-    cy.get('pre').contains('author = {Developers, EEA},');
+    cy.get('pre').contains('author = {{Developers E.}},');
     cy.get('pre').contains('year = {2023},');
     cy.get('pre').contains('title = {Citation},');
     cy.get('pre').contains('howpublished = {http://www.eeacitation.com},');
