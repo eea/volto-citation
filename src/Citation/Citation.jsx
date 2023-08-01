@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './styles.less';
 import { Tab, Button } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
+import { Icon } from '@plone/volto/components';
+
+import Cite from 'citation-js';
+
 import copySVG from '@plone/volto/icons/copy.svg';
 import checkSVG from '@plone/volto/icons/check.svg';
-import { Icon } from '@plone/volto/components';
-import Cite from 'citation-js';
+
+import './styles.less';
+
 const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
   const [icon, setIcon] = useState(copySVG);
+
   useEffect(() => {
     if (copyUrlStatus === 'copied') {
       setIcon(checkSVG);
@@ -50,7 +55,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
   };
 
   React.useEffect(() => {
-    let citation = new Cite({
+    const citation = new Cite({
       title: title,
       type: type,
       author: authors.map((author) => {
@@ -62,20 +67,25 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       issued: { 'date-parts': [[year]] },
       URL: link,
     });
-    let output = citation.format(format, {
+
+    const output = citation.format(format, {
       format: subFormat,
       template: 'apa',
     });
     setCitation(output);
+
     if (subFormat === 'html')
       setCitation(
-        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <p>
-        ${authors.map((author, index) => {
-          let separator = '';
-          if (index < authors.length - 1) separator = ', ';
-          return (author || '') + separator;
-        })}
-      </p>  <a href=${link}>${link}</a> </blockquote>`,
+        `<blockquote>
+  <p>(${year}).</p>
+  <p>${title}</p>
+  <p>${authors.map((author, index) => {
+    const separator = index < authors.length - 1 ? ', ' : '';
+    return (author || '') + separator;
+  })}
+  </p>
+  <a href=${link}>${link}</a>
+</blockquote>`,
       );
   }, [authors, format, year, link, subFormat, title, type]);
 
@@ -84,7 +94,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       menuItem: 'Html',
       render: () => (
         <Tab.Pane attached={false}>
-          {' '}
           <blockquote>
             <p>({year}).</p>
             <p>{title}</p>
@@ -104,7 +113,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       menuItem: 'Text',
       render: () => (
         <Tab.Pane attached={false}>
-          {' '}
           <pre>{citation}</pre>
         </Tab.Pane>
       ),
@@ -113,7 +121,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       menuItem: 'RIS',
       render: () => (
         <Tab.Pane attached={false}>
-          {' '}
           <pre>{citation}</pre>
         </Tab.Pane>
       ),
@@ -122,7 +129,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       menuItem: 'BibTex',
       render: () => (
         <Tab.Pane attached={false}>
-          {' '}
           <pre>{citation}</pre>
         </Tab.Pane>
       ),
