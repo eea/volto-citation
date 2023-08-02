@@ -133,9 +133,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
     <div className="citation-block tabs-block">
       <Tab
         panes={modes}
-        onTabChange={(e, data) => {
-          console.log(data);
-        }}
         menu={{ className: 'ui green fluid pointing secondary menu' }}
       />
     </div>
