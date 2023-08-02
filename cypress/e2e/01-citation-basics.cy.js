@@ -82,6 +82,10 @@ describe('Blocks Tests', () => {
     cy.get('pre').contains('title = {Citation},');
     cy.get('pre').contains('howpublished = {http://www.eeacitation.com},');
     cy.get('.citation-copy').click();
+    cy.get('.citation-block a').first().next().next().next().type('{enter}');
+    cy.get('.citation-block a').first().next().next().type('{enter}');
+    cy.get('.citation-block a').first().next().type('{enter}');
+    cy.get('.citation-block a').first().type('{enter}');
     //test url
     cy.url().should('eq', Cypress.config().baseUrl + '/cypress/my-page');
   });
