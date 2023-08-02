@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Label } from 'semantic-ui-react';
+import { Tab, Label, Menu } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
 import { Icon } from '@plone/volto/components';
 
@@ -23,7 +23,23 @@ const CopyUrlButton = ({ citation, className }) => {
     }
   }, [copyUrlStatus]);
 
-  return <Icon name={icon} onClick={copyUrl} className="citation-copy" />;
+  return (
+    <Label
+      floating
+      basic
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') copyUrl();
+      }}
+    >
+      <Icon
+        name={icon}
+        onClick={copyUrl}
+        className="citation-copy"
+        tabIndex={0}
+      />
+    </Label>
+  );
 };
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
@@ -63,7 +79,16 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
 
   const modes = [
     {
-      menuItem: 'Html',
+      menuItem: (
+        <Menu.Item
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
+          }}
+        >
+          Html
+        </Menu.Item>
+      ),
       render: () => (
         <Tab.Pane attached={false}>
           <blockquote className="text">
@@ -77,48 +102,71 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
               })}
             </p>
             {mode === 'edit' ? <p>{link}</p> : <a href={link}>{link}</a>}
-            <Label floating basic>
-              <CopyUrlButton citation={cite('html')} />
-            </Label>
+
+            <CopyUrlButton citation={cite('html')} />
           </blockquote>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'Text',
+      menuItem: (
+        <Menu.Item
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
+          }}
+        >
+          Text
+        </Menu.Item>
+      ),
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
             <pre>{cite('bibliography', 'text')}</pre>
-            <Label floating basic>
-              <CopyUrlButton citation={cite('bibliography', 'text')} />
-            </Label>
+
+            <CopyUrlButton citation={cite('bibliography', 'text')} />
           </div>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'RIS',
+      menuItem: (
+        <Menu.Item
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
+          }}
+        >
+          Ris
+        </Menu.Item>
+      ),
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
             <pre>{cite('ris')}</pre>
-            <Label floating basic>
-              <CopyUrlButton citation={cite('ris')} />
-            </Label>
+
+            <CopyUrlButton citation={cite('ris')} />
           </div>
         </Tab.Pane>
       ),
     },
     {
-      menuItem: 'BibTex',
+      menuItem: (
+        <Menu.Item
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
+          }}
+        >
+          BibTex
+        </Menu.Item>
+      ),
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
             <pre>{cite('bibtex')}</pre>
-            <Label floating basic>
-              <CopyUrlButton citation={cite('bibtex')} />
-            </Label>
+
+            <CopyUrlButton citation={cite('bibtex')} />
           </div>
         </Tab.Pane>
       ),
