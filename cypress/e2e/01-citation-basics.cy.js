@@ -20,7 +20,14 @@ describe('Blocks Tests', () => {
       .click()
       .type('citation');
     cy.get('.citation').click();
+    //empty citation view test
+    cy.get('#toolbar-save').click();
+    cy.wait(300);
+    cy.get('.edit').click();
+    cy.wait(300);
 
+    //edit citation
+    cy.get('.citation-block').click();
     cy.get('#field-url').click().type('www.eeacitation.com');
     cy.get('#blockform-fieldset-default #field-title').click().type('Citation');
 
