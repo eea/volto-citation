@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Button, Label } from 'semantic-ui-react';
+import { Tab, Label } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
 import { Icon } from '@plone/volto/components';
 
@@ -27,10 +27,6 @@ const CopyUrlButton = ({ citation, className }) => {
 };
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
-  const [format, setFormat] = useState('bibliography');
-  const [subFormat, setSubFormat] = useState('html');
-  const [citation, setCitation] = useState();
-
   const cite = (format, subFormat) => {
     const citationObject = new Cite({
       title: title,
