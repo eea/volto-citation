@@ -64,21 +64,24 @@ describe('Blocks Tests', () => {
     cy.get('blockquote').contains('Citation');
     cy.get('blockquote').contains('Developers E.');
     cy.get('blockquote').contains('http://www.eeacitation.com');
+    cy.get('.citation-copy').click();
     cy.get('.citation-block a').first().next().click();
     cy.get('pre').contains(
       'Developers E. (2023). Citation. http://www.eeacitation.com',
     );
+    cy.get('.citation-copy').click();
     cy.get('.citation-block a').first().next().next().click();
     cy.get('pre').contains('TY  - JOUR');
     cy.get('pre').contains('DA  - 2023///');
     cy.get('pre').contains('TI  - Citation');
     cy.get('pre').contains('UR  - http://www.eeacitation.com');
+    cy.get('.citation-copy').click();
     cy.get('.citation-block a').first().next().next().next().click();
     cy.get('pre').contains('author = {{Developers E.}},');
     cy.get('pre').contains('year = {2023},');
     cy.get('pre').contains('title = {Citation},');
     cy.get('pre').contains('howpublished = {http://www.eeacitation.com},');
-
+    cy.get('.citation-copy').click();
     //test url
     cy.url().should('eq', Cypress.config().baseUrl + '/cypress/my-page');
   });
