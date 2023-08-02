@@ -57,10 +57,12 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
                 <a href=${link}>${link}</a>
               </blockquote>`;
     else
-      return citationObject.format(format, {
-        format: subFormat,
-        template: 'apa',
-      });
+      return citationObject
+        .format(format, {
+          format: subFormat,
+          template: 'apa',
+        })
+        .replace(/(^[ \t]*\n)/gm, '');
   };
 
   const modes = [
