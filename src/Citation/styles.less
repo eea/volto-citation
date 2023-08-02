@@ -8,12 +8,24 @@
   .active.tab {
     border: 0;
   }
-
-  .citation-copy {
-    margin-right: 0 !important;
-    margin-left: auto !important;
+  .text {
+    position: relative;
+    .basic.floating {
+      background-color: transparent !important;
+      border: none !important;
+      margin: -0.5em 0em 0em -3em !important;
+    }
   }
 
+  .citation-copy {
+    height: 1.5rem !important;
+    padding: 0.1em 1.3em !important;
+  }
+  .text {
+    .floating.label {
+      top: -1rem;
+    }
+  }
   pre {
     display: block;
     overflow: auto;
