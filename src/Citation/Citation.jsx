@@ -59,15 +59,15 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
 
     if (format === 'html')
       return `<blockquote>
-                <p>(${year}).</p>
-                <p>${title}</p>
-                <p>${authors.map((author, index) => {
-                  const separator = index < authors.length - 1 ? ', ' : '';
-                  return (author || '') + separator;
-                })}
-                </p>
-                <a href=${link}>${link}</a>
-              </blockquote>`;
+<p>(${year}).</p>
+<p>${title}</p>
+<p>${authors.map((author, index) => {
+        const separator = index < authors.length - 1 ? ', ' : '';
+        return (author || '') + separator;
+      })}
+</p>
+<a href=${link}>${link}</a>
+</blockquote>`;
     else
       return citationObject
         .format(format, {
