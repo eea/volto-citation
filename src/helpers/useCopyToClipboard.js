@@ -2,11 +2,13 @@ import React from 'react';
 
 const useCopyToClipboard = (text) => {
   const [copyStatus, setCopyStatus] = React.useState('inactive');
+
   const copy = React.useCallback(() => {
-    navigator.clipboard.writeText(text).then(
-      () => setCopyStatus('copied'),
-      () => setCopyStatus('failed'),
-    );
+    if (navigator?.clipboard)
+      navigator.clipboard.writeText(text).then(
+        () => setCopyStatus('copied'),
+        () => setCopyStatus('failed'),
+      );
   }, [text]);
 
   React.useEffect(() => {

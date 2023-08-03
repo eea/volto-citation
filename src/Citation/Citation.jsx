@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './styles.less';
-import { Menu } from 'semantic-ui-react';
+import { Tab, Label, Menu } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
-import copySVG from '@plone/volto/icons/copy.svg';
-import checkSVG from '@plone/volto/icons/check.svg';
 import { Icon } from '@plone/volto/components';
 
 import Cite from 'citation-js';
 
-const CopyUrlButton = ({ citation }) => {
+import copySVG from '@plone/volto/icons/copy.svg';
+import checkSVG from '@plone/volto/icons/check.svg';
+
+import './styles.less';
+
+const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
   const [icon, setIcon] = useState(copySVG);
+
   useEffect(() => {
     if (copyUrlStatus === 'copied') {
       setIcon(checkSVG);
@@ -20,115 +23,162 @@ const CopyUrlButton = ({ citation }) => {
     }
   }, [copyUrlStatus]);
 
-  return <Icon className="citation-copy" name={icon} onClick={copyUrl} />;
+  return (
+    <Label
+      floating
+      basic
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') copyUrl();
+      }}
+    >
+      <Icon
+        name={icon}
+        onClick={copyUrl}
+        className="citation-copy"
+        tabIndex={0}
+      />
+    </Label>
+  );
 };
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
-  const [format, setFormat] = useState('bibliography');
-  const [subFormat, setSubFormat] = useState('html');
-  const [citation, setCitation] = useState();
-
-  React.useEffect(() => {
-    let citation = new Cite({
+  const cite = (format, subFormat) => {
+    const citationObject = new Cite({
       title: title,
       type: type,
-      author: authors,
+      author: authors.map((author) => {
+        return {
+          literal: author,
+        };
+      }),
+
       issued: { 'date-parts': [[year]] },
       URL: link,
     });
-    let output = citation.format(format, {
-      format: subFormat,
-      template: 'apa',
-    });
-    setCitation(output);
-    if (subFormat === 'html')
-      setCitation(
-        `<blockquote> <p>(${year}).</p> <p>${title}</p>  <p>
-        ${authors.map((author, index) => {
-          let separator = '';
-          if (index < authors.length - 1) separator = ' , ';
-          return (
-            author?.family + ' ' + author.given?.charAt(0) + '.' + separator
-          );
-        })}
-      </p>  <a href=${link}>${link}</a> </blockquote>`,
-      );
-  }, [authors, format, year, link, subFormat, title, type]);
 
-  const handleChangeFormat = (format, subformat) => {
-    setFormat(format);
-    setSubFormat(subformat);
+    if (format === 'html')
+      return `<blockquote>
+<p>(${year}).</p>
+<p>${title}</p>
+<p>${authors.map((author, index) => {
+        const separator = index < authors.length - 1 ? ', ' : '';
+        return (author || '') + separator;
+      })}
+</p>
+<a href=${link}>${link}</a>
+</blockquote>`;
+    else
+      return citationObject
+        .format(format, {
+          format: subFormat,
+          template: 'apa',
+        })
+        .replace(/(^[ \t]*\n)/gm, '');
   };
-  return (
-    <div className="citation-block">
-      <Menu pointing>
+
+  const modes = [
+    {
+      menuItem: (
         <Menu.Item
-          name="html"
-          as="a"
-          active={subFormat === 'html'}
-          onClick={() => {
-            handleChangeFormat('bibliography', 'html');
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
           }}
         >
-          HTML
+          Html
         </Menu.Item>
+      ),
+      render: () => (
+        <Tab.Pane attached={false}>
+          <blockquote className="text">
+            <p>({year}).</p>
+            <p>{title}</p>
+            <p>
+              {authors.map((author, index) => {
+                let separator = '';
+                if (index < authors.length - 1) separator = ', ';
+                return (author || '') + separator;
+              })}
+            </p>
+            {mode === 'edit' ? <p>{link}</p> : <a href={link}>{link}</a>}
 
+            <CopyUrlButton citation={cite('html')} />
+          </blockquote>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: (
         <Menu.Item
-          name="text"
-          active={subFormat === 'text'}
-          onClick={() => {
-            handleChangeFormat('bibliography', 'text');
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
           }}
         >
           Text
         </Menu.Item>
+      ),
+      render: () => (
+        <Tab.Pane attached={false}>
+          <div className="text">
+            <pre>{cite('bibliography', 'text')}</pre>
 
+            <CopyUrlButton citation={cite('bibliography', 'text')} />
+          </div>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: (
         <Menu.Item
-          name="ris"
-          active={format === 'ris'}
-          onClick={() => {
-            handleChangeFormat('ris', '');
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
           }}
         >
-          RIS
+          Ris
         </Menu.Item>
+      ),
+      render: () => (
+        <Tab.Pane attached={false}>
+          <div className="text">
+            <pre>{cite('ris')}</pre>
+
+            <CopyUrlButton citation={cite('ris')} />
+          </div>
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: (
         <Menu.Item
-          name="BibTex"
-          active={format === 'bibtex'}
-          onClick={() => {
-            handleChangeFormat('bibtex');
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.target.click();
           }}
         >
           BibTex
         </Menu.Item>
-        <Menu.Menu position="right">
-          <Menu.Item>
-            <CopyUrlButton citation={citation} />
-          </Menu.Item>
-        </Menu.Menu>
-      </Menu>
-      {subFormat === 'text' || format === 'bibtex' || format === 'ris' ? (
-        <pre>{citation}</pre>
-      ) : (
-        <blockquote>
-          <p>({year}).</p>
-          <p>{title}</p>
-          <p>
-            {authors.map((author, index) => {
-              let separator = '';
-              if (index < authors.length - 1) separator = ' , ';
-              return (
-                (author?.family || '') +
-                ' ' +
-                (author.given?.charAt(0) || '') +
-                '.' +
-                separator
-              );
-            })}
-          </p>
-          {mode === 'edit' ? <p>{link}</p> : <a href={link}>{link}</a>}
-        </blockquote>
-      )}
+      ),
+      render: () => (
+        <Tab.Pane attached={false}>
+          <div className="text">
+            <pre>{cite('bibtex')}</pre>
+
+            <CopyUrlButton citation={cite('bibtex')} />
+          </div>
+        </Tab.Pane>
+      ),
+    },
+  ];
+
+  return (
+    <div className="citation-block tabs-block">
+      <Tab
+        panes={modes}
+        menu={{ className: 'ui green fluid pointing secondary menu' }}
+      />
     </div>
   );
 }
