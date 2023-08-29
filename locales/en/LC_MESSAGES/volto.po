@@ -1,0 +1,73 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#: schema
+# defaultMessage: The authors that have contributed to the article
+msgid "AauthorsDescription"
+msgstr ""
+
+#: schema
+# defaultMessage: One of the authors
+msgid "AuthorDescription"
+msgstr ""
+
+#: Citation/CitationSidebar
+#: schema
+# defaultMessage: Citation
+msgid "Citation"
+msgstr ""
+
+#: Citation/CitationSidebar
+# defaultMessage: No Citation selected
+msgid "No Citation selected"
+msgstr ""
+
+#: schema
+# defaultMessage: The title of the article
+msgid "TitleDescription"
+msgstr ""
+
+#: schema
+# defaultMessage: URL
+msgid "URL"
+msgstr ""
+
+#: schema
+# defaultMessage: The url where the article can be found
+msgid "URLDescription"
+msgstr ""
+
+#: schema
+# defaultMessage: The year when the article was published
+msgid "YearDescription"
+msgstr ""
+
+#: schema
+# defaultMessage: Author
+msgid "author"
+msgstr ""
+
+#: schema
+# defaultMessage: Authors
+msgid "authors"
+msgstr ""
+
+#: schema
+# defaultMessage: Title
+msgid "title"
+msgstr ""
+
+#: schema
+# defaultMessage: Year
+msgid "year"
+msgstr ""
