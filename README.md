@@ -19,7 +19,7 @@
 
 ## Features
 
-![screen-capture](https://github.com/eea/volto-citation/assets/50819975/3aa06125-6736-4e64-9ede-9006b6219ec9)
+![screen-capture](https://raw.githubusercontent.com/eea/volto-citation/master/docs/volto-citation.gif)
 
 Volto Citation shows users how to cite an article. It supports four types of citation: HTML, TEXT, RIS and BibTeX. On top of that you can copy the citation by pressing on the copy button
 
