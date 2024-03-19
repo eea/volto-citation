@@ -11,15 +11,9 @@ describe('Blocks Tests', () => {
 
     cy.get('.documentFirstHeading').contains('My Citation Page');
 
-    cy.getSlate().click();
-
     // Add block
+    cy.getSlate().click().type('/citation{enter}');
 
-    cy.get('.ui.basic.icon.button.block-add-button')
-      .first()
-      .click()
-      .type('citation');
-    cy.get('.citation').click();
     //empty citation view test
     cy.get('#toolbar-save').click();
     cy.wait(300);
