@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Label, Menu } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
 import { Icon } from '@plone/volto/components';
-
-import Cite from 'citation-js';
+import loadable from '@loadable/component';
 
 import copySVG from '@plone/volto/icons/copy.svg';
 import checkSVG from '@plone/volto/icons/check.svg';
 
 import './styles.less';
+
+const CitationJS = loadable(() => import('citation-js'));
 
 const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
@@ -44,7 +45,7 @@ const CopyUrlButton = ({ citation, className }) => {
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
   const cite = (format, subFormat) => {
-    const citationObject = new Cite({
+    const citationObject = new CitationJS.Cite({
       title: title,
       type: type,
       author: authors.map((author) => {
