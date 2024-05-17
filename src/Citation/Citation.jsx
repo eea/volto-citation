@@ -9,7 +9,7 @@ import checkSVG from '@plone/volto/icons/check.svg';
 
 import './styles.less';
 
-const CitationJS = loadable(() => import('citation-js'));
+const CitationJS = loadable.lib(() => import('citation-js'));
 
 const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
@@ -20,7 +20,7 @@ const CopyUrlButton = ({ citation, className }) => {
       setIcon(checkSVG);
       setTimeout(() => {
         setIcon(copySVG);
-      }, [5000]);
+      }, 5000);
     }
   }, [copyUrlStatus]);
 
@@ -45,37 +45,39 @@ const CopyUrlButton = ({ citation, className }) => {
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
   const cite = (format, subFormat) => {
-    const citationObject = new CitationJS.Cite({
-      title: title,
-      type: type,
-      author: authors.map((author) => {
-        return {
-          literal: author,
-        };
-      }),
+    return CitationJS.load().then((module) => {
+      const { default: Cite } = module;
+      const citationObject = new Cite({
+        title: title,
+        type: type,
+        author: authors.map((author) => {
+          return {
+            literal: author,
+          };
+        }),
+        issued: { 'date-parts': [[year]] },
+        URL: link,
+      });
 
-      issued: { 'date-parts': [[year]] },
-      URL: link,
-    });
-
-    if (format === 'html')
-      return `<blockquote>
+      if (format === 'html')
+        return `<blockquote>
 <p>(${year}).</p>
 <p>${title}</p>
 <p>${authors.map((author, index) => {
-        const separator = index < authors.length - 1 ? ', ' : '';
-        return (author || '') + separator;
-      })}
+          const separator = index < authors.length - 1 ? ', ' : '';
+          return (author || '') + separator;
+        })}
 </p>
 <a href=${link}>${link}</a>
 </blockquote>`;
-    else
-      return citationObject
-        .format(format, {
-          format: subFormat,
-          template: 'apa',
-        })
-        .replace(/(^[ \t]*\n)/gm, '');
+      else
+        return citationObject
+          .format(format, {
+            format: subFormat,
+            template: 'apa',
+          })
+          .replace(/(^[ \t]*\n)/gm, '');
+    });
   };
 
   const modes = [
