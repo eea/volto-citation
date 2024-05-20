@@ -110,9 +110,8 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
     };
   }, [title, authors, link, type, year]);
 
-  const modes = [
+  const tab_panes = [
     {
-      key: 'html',
       menuItem: (
         <Menu.Item
           key="html"
@@ -134,7 +133,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       ),
     },
     {
-      key: 'text',
       menuItem: (
         <Menu.Item
           key="text"
@@ -156,7 +154,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       ),
     },
     {
-      key: 'ris',
       menuItem: (
         <Menu.Item
           key="ris"
@@ -178,7 +175,6 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       ),
     },
     {
-      key: 'bibtex',
       menuItem: (
         <Menu.Item
           key="bibtex"
@@ -204,7 +200,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
   return (
     <div className="citation-block tabs-block">
       <Tab
-        panes={modes}
+        panes={tab_panes}
         menu={{ className: 'ui green fluid pointing secondary menu' }}
       />
     </div>
