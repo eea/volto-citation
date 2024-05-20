@@ -86,7 +86,11 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
           return (author || '') + separator;
         })}
 </p>
-<a href=${link}>${link}</a>
+${
+  mode !== 'edit'
+    ? '<a href=' + link + '>' + link + '</a>'
+    : '<p>' + link + '</p>'
+}
 </blockquote>`);
 
         setTextCitation(
@@ -108,7 +112,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
     return () => {
       isMounted = false;
     };
-  }, [title, authors, link, type, year]);
+  }, [title, authors, link, type, year, mode]);
 
   const tab_panes = [
     {
