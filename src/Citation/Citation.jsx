@@ -1,27 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tab, Label, Menu } from 'semantic-ui-react';
 import { useCopyToClipboard } from '@eeacms/volto-citation/helpers';
 import { Icon } from '@plone/volto/components';
-
-import Cite from 'citation-js';
+import loadable from '@loadable/component';
 
 import copySVG from '@plone/volto/icons/copy.svg';
 import checkSVG from '@plone/volto/icons/check.svg';
 
 import './styles.less';
 
+const CitationJS = loadable.lib(() => import('citation-js'));
+
 const CopyUrlButton = ({ citation, className }) => {
   const [copyUrlStatus, copyUrl] = useCopyToClipboard(citation);
   const [icon, setIcon] = useState(copySVG);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     if (copyUrlStatus === 'copied') {
       setIcon(checkSVG);
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setIcon(copySVG);
-      }, [5000]);
+      }, 5000);
     }
   }, [copyUrlStatus]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <Label
@@ -43,44 +54,71 @@ const CopyUrlButton = ({ citation, className }) => {
 };
 
 function Citation({ title, authors, link, type = 'article', year, mode }) {
-  const cite = (format, subFormat) => {
-    const citationObject = new Cite({
-      title: title,
-      type: type,
-      author: authors.map((author) => {
-        return {
-          literal: author,
-        };
-      }),
+  const [htmlCitation, setHtmlCitation] = useState('');
+  const [textCitation, setTextCitation] = useState('');
+  const [risCitation, setRisCitation] = useState('');
+  const [bibtexCitation, setBibtexCitation] = useState('');
 
-      issued: { 'date-parts': [[year]] },
-      URL: link,
-    });
+  useEffect(() => {
+    let isMounted = true;
 
-    if (format === 'html')
-      return `<blockquote>
+    const loadCitation = async () => {
+      const module = await CitationJS.load();
+      const { default: Cite } = module;
+      const citationObject = new Cite({
+        title: title,
+        type: type,
+        author: authors.map((author) => {
+          return {
+            literal: author,
+          };
+        }),
+        issued: { 'date-parts': [[year]] },
+        URL: link,
+      });
+
+      if (isMounted) {
+        setHtmlCitation(`<blockquote>
 <p>(${year}).</p>
 <p>${title}</p>
 <p>${authors.map((author, index) => {
-        const separator = index < authors.length - 1 ? ', ' : '';
-        return (author || '') + separator;
-      })}
+          const separator = index < authors.length - 1 ? ', ' : '';
+          return (author || '') + separator;
+        })}
 </p>
-<a href=${link}>${link}</a>
-</blockquote>`;
-    else
-      return citationObject
-        .format(format, {
-          format: subFormat,
-          template: 'apa',
-        })
-        .replace(/(^[ \t]*\n)/gm, '');
-  };
+${
+  mode !== 'edit'
+    ? '<a href=' + link + '>' + link + '</a>'
+    : '<p>' + link + '</p>'
+}
+</blockquote>`);
 
-  const modes = [
+        setTextCitation(
+          citationObject
+            .format('bibliography', {
+              format: 'text',
+              template: 'apa',
+            })
+            .replace(/(^[ \t]*\n)/gm, ''),
+        );
+
+        setRisCitation(citationObject.format('ris'));
+        setBibtexCitation(citationObject.format('bibtex'));
+      }
+    };
+
+    loadCitation();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [title, authors, link, type, year, mode]);
+
+  const tab_panes = [
     {
       menuItem: (
         <Menu.Item
+          key="html"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.target.click();
@@ -91,26 +129,17 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       ),
       render: () => (
         <Tab.Pane attached={false}>
-          <blockquote className="text">
-            <p>({year}).</p>
-            <p>{title}</p>
-            <p>
-              {authors.map((author, index) => {
-                let separator = '';
-                if (index < authors.length - 1) separator = ', ';
-                return (author || '') + separator;
-              })}
-            </p>
-            {mode === 'edit' ? <p>{link}</p> : <a href={link}>{link}</a>}
-
-            <CopyUrlButton citation={cite('html')} />
-          </blockquote>
+          <div className="text">
+            <div dangerouslySetInnerHTML={{ __html: htmlCitation }} />
+            <CopyUrlButton citation={htmlCitation} />
+          </div>
         </Tab.Pane>
       ),
     },
     {
       menuItem: (
         <Menu.Item
+          key="text"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.target.click();
@@ -122,9 +151,8 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
-            <pre>{cite('bibliography', 'text')}</pre>
-
-            <CopyUrlButton citation={cite('bibliography', 'text')} />
+            <pre>{textCitation}</pre>
+            <CopyUrlButton citation={textCitation} />
           </div>
         </Tab.Pane>
       ),
@@ -132,6 +160,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
     {
       menuItem: (
         <Menu.Item
+          key="ris"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.target.click();
@@ -143,9 +172,8 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
-            <pre>{cite('ris')}</pre>
-
-            <CopyUrlButton citation={cite('ris')} />
+            <pre>{risCitation}</pre>
+            <CopyUrlButton citation={risCitation} />
           </div>
         </Tab.Pane>
       ),
@@ -153,6 +181,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
     {
       menuItem: (
         <Menu.Item
+          key="bibtex"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.target.click();
@@ -164,9 +193,8 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
       render: () => (
         <Tab.Pane attached={false}>
           <div className="text">
-            <pre>{cite('bibtex')}</pre>
-
-            <CopyUrlButton citation={cite('bibtex')} />
+            <pre>{bibtexCitation}</pre>
+            <CopyUrlButton citation={bibtexCitation} />
           </div>
         </Tab.Pane>
       ),
@@ -176,7 +204,7 @@ function Citation({ title, authors, link, type = 'article', year, mode }) {
   return (
     <div className="citation-block tabs-block">
       <Tab
-        panes={modes}
+        panes={tab_panes}
         menu={{ className: 'ui green fluid pointing secondary menu' }}
       />
     </div>
