@@ -21,8 +21,6 @@ import './commands';
 //Generate code-coverage
 import '@cypress/code-coverage/support';
 
-// Fail Fast
-import 'cypress-fail-fast';
 
 export const slateBeforeEach = (contentType = 'Document') => {
   cy.autologin();
